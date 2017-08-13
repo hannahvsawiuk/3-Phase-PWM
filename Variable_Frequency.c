@@ -82,8 +82,7 @@ ISR(TIMER2_COMPA_vect)
   }
   else { 
     /*Update look up table index and output compare register values*/
-    OCR0A = pgm_read_byte(&sinewaveLUT[index]);
-    OCR1A = pgm_read_byte(&sinewaveLUT[index + 85]);
+    OCR0A = pgm_read_byte(&sinewaveLUT[index]);    OCR1A = pgm_read_byte(&sinewaveLUT[index + 85]);
     OCR1B = pgm_read_byte(&sinewaveLUT[index + 170]);
     index++;
   }
@@ -93,8 +92,7 @@ ISR(TIMER2_COMPA_vect)
 /*        System Setup        */
 /******************************/
 void setup (void)
-{ 
-  pinMode(pwmOUT1, OUTPUT); //enables port B1 (OC1A) as an output pin
+{   pinMode(pwmOUT1, OUTPUT); //enables port B1 (OC1A) as an output pin
   pinMode(pwmOUT2, OUTPUT); //enables port B2 (OC1B) as an output pin
   pinMode(pwmOUT3, OUTPUT); //enables port B3 (OC2A) as an output pin
 
@@ -140,6 +138,6 @@ void loop (void)
   frequency = (analogIn * 120.0)/1023.0; /*Convert analog value into a frequency*/
   str2 = str1 + frequency + '\r';
   Serial.print(str2); /*Print present frequency to console. Using PuTTY*/
-  delay(200); /*dealy for 200 ms*/
+  delay(200); /*delay for 200 ms*/
 } 
 
