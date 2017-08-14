@@ -128,7 +128,7 @@ void setup (void)
   frequency = 0.0;
   
   sei(); /*enable interrupts*/
-  Serial.begin(9600); /*initialize Baud rate*/
+  Serial.begin(19200); /*initialize Baud rate*/
 }
 
 /******************************/
