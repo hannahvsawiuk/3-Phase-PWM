@@ -117,7 +117,6 @@ void setup (void)
   TIMSK0 = (1 << TOIE0);  /*Enable Timer0*/   
   TIMSK1 = (1 << TOIE1); /*Enable Timer1*/   
   TIMSK2 = (1 << OCIE2A); /* Configure Timer2 interrupts to send LUT value */
-    
   
   /*Note: OCR2A is set after TCCR1x initialization to avoid overwriting/reset*/
   OCR2A = 0;/*Set the 16-bit compare register OCR2A (TOP value for CTC mode of Timer2)*/
@@ -142,6 +141,3 @@ void loop (void)
   Serial.print(str2); /*Print present frequency to console. Using PuTTY*/
   delay(200); /*delay for 200 ms*/
 } 
-
-
-
