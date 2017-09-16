@@ -34,14 +34,15 @@
  * 100   |  25600     |    625
  * 120   |  30720     |    521
  * 
- * To alter the frequency of the PWM sine waveform, the OCR2A register is changed. OCR2A = sysCLK /readSpeed = sysclk / floor(frequency * 256)
+ * To alter the frequency of the PWM sine waveform, the OCR2A register is changed: 
+ *    OCR2A = sysCLK / readSpeed = sysCLK / round(frequency * 256)
 */
 
 //***************************//
 //         Constants         //
 //***************************//
 #define LUT_entries 255 //number of entries in the sine wave look up table
-#define sysCLK 16000000 //16MHz external clock (arduino UNO) NOTE: change if using external xtal (connect at PB6 pin)
+#define sysCLK 16000000 //16MHz internal clock (arduino UNO) NOTE: change if using external xtal (connect at PB6 pin)
 
 //atmega328p (Arduino Uno or Nano) PWM pins: 3, 5, 6, 9, 10, 11 NOTE: match with the output compare registers
 #define pwmOUT1 6    //port D6 (OC0A) 
