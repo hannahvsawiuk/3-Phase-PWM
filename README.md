@@ -15,7 +15,9 @@
 *Schematic software:* Altium Designer, TINA-TI
 
 *Microcontrollers:* Arduino UNO (ATmega328P-PU) as controller and Arduino Nano (ATmega328P) for testing
+
 *Low pass filter designer:* [link](http://sim.okawa-denshi.jp/en/CRtool.php)
+
 *Isolation bootstrap calculator:* [link](https://www.silabs.com/tools/Pages/bootstrap-calculator.aspx)
 
 *Photos and diagrams:* [final variable frequency drive schematic](https://www.dropbox.com/s/kv2sk5hjf7secxg/finalschematic.pdf?dl=0), [testing setup](https://www.dropbox.com/s/rcwgqrme0zb9l1e/Arduino%20setup.png?dl=0), [test results](https://www.dropbox.com/s/nvv9w14xmfwcpsz/PWM.png?dl=0)
