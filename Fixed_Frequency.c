@@ -18,23 +18,23 @@
 //***************************//
 //         Constants         //
 //***************************//
-#define readSpeed 128   //1/2 Hz  
-#define LUT_entries 255 //number of entries in the sine wave look up table
-#define sysCLK 16000000 //16MHz external clock (arduino UNO) NOTE: change if using external xtal (connect at PB6 pin)
+#define readSpeed 128   // 1/2 Hz  
+#define LUT_entries 255 // number of entries in the sine wave look up table
+#define sysCLK 16000000 // 16MHz external clock (arduino UNO) NOTE: change if using external xtal (connect at PB6 pin)
 
 //atmega328p (Arduino Uno or Nano) PWM pins: 3, 5, 6, 9, 10, 11 NOTE: match with the output compare registers
-#define pwmOUT1 6    //port D6 (OC0A) 
-#define pwmOUT2 9    //port B1 (OC1A) 
-#define pwmOUT3 10   //port B2 (OC1B) 
+#define pwmOUT1 6    // port D6 (OC0A) 
+#define pwmOUT2 9    // port B1 (OC1A) 
+#define pwmOUT3 10   // port B2 (OC1B) 
 
 //***************************//
-//  Header and include files //
+//   Header and Librarie  s  //
 //***************************//
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/pgmspace.h>  /*pgm_read_byte and PROGMEM*/
+#include <avr/pgmspace.h>  // pgm_read_byte and PROGMEM 
 #include <util/delay.h>
-#include "sinewave_LUT.h" /*LUT file*/
+#include "sinewave_LUT.h"  // LUT file
 
 /******************************/
 /*     Volatile Variables     */
@@ -50,7 +50,7 @@ ISR(TIMER2_COMPA_vect)
     index = 0; 
   }
   else { 
-    /*Update look up table index and output compare register values*/
+    /* Update look up table index and output compare register values */
     OCR0A = pgm_read_byte(&sinewaveLUT[index]);
     OCR1A = pgm_read_byte(&sinewaveLUT[index + 85]);
     OCR1B = pgm_read_byte(&sinewaveLUT[index + 170]);
@@ -83,18 +83,17 @@ void setup (void)
 
   cli(); /*disable interrupts*/
   
-  TIMSK0 = (1 << TOIE0);  /*Enable Timer0*/   
-  TIMSK1 = (1 << TOIE1); /*Enable Timer1*/   
-  TIMSK2 = (1 << OCIE2A); /* Configure Timer2 interrupts to send LUT value */
+  TIMSK0 = (1 << TOIE0);  // Enable Timer0   
+  TIMSK1 = (1 << TOIE1);  // Enable Timer1   
+  TIMSK2 = (1 << OCIE2A); // Configure Timer2 interrupts to send LUT value 
     
   /*Note: OCR2A is set after TCCR1x initialization to avoid overwriting/reset*/
-  OCR2A = sysCLK / readSpeed;/*Set the 16-bit compare register OCR2A (TOP value for CTC mode of Timer2)*/
-  index = 0; /*reset index*/
-  sei(); /*enable interrupts*/
+  OCR2A = sysCLK / readSpeed; // Set the 16-bit compare register OCR2A (TOP value for CTC mode of Timer2)
+  index = 0; // reset index
 }
 
 /******************************/
-/*      Main System Run       */
+/*      Main System Loop      */
 /******************************/
 void loop (void) 
 { 
