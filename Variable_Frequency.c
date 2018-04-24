@@ -26,17 +26,24 @@
  * the 3 output PWM sinewave signals are updated with respect to the value of OCR2A which is affected by the analog input.
  * An analog input was used because it mimics an acceleration pedal.
  * 
- * f(Hz)    readSpeed     OCR2A 
+ * f(Hz)    readSpeed    OCR2A 
+ *  1    |    256     |   244
+ *  2    |    512     |   122
+ *  3    |    768     |    81
  * 10    |   2560     |    24
- * 30    |   7680     |    8
- * 60    |  15360     |    4
- * 120   |  30720     |    2
+ * 30    |   7680     |     8
+ * 60    |  15360     |     4
+ * 120   |  30720     |     2
  * 
  * Works best for lower frequency applications 
  * 
  * To alter the frequency of the PWM sine waveform, the OCR2A register is changed: 
  *    OCR2A = sysCLK/prescaler / readSpeed = round(sysCLK / prescaler * frequency * 256)
  *    
+ * Because the values in the look up table are for the situation when OCR2A=0xFF, they must be made proportional
+ * to the desired frequency. 
+ * 
+ * 
 **/
 
 //***************************//
@@ -85,9 +92,11 @@ ISR(TIMER2_COMPA_vect)  // output compare interrupt
   }
   else { 
     /* Update look up table index and output compare register values */
-    OCR0A = pgm_read_byte(&sinewaveLUT[index]);
-    OCR1A = pgm_read_byte(&sinewaveLUT[index + 85]);
-    OCR1B = pgm_read_byte(&sinewaveLUT[index + 170]);
+    int divisor = 256/OCR2A;  // make the pulse width proportional to the frequency
+    /* Rounding used again since OCRxx regs can only take integer values */
+    OCR0A = round(pgm_read_byte(&sinewaveLUT[index])/divisor);
+    OCR1A = round(pgm_read_byte(&sinewaveLUT[index + 85])/divisor);
+    OCR1B = round(pgm_read_byte(&sinewaveLUT[index + 170])/divisor);
     index++;
   }
 }
@@ -107,9 +116,9 @@ void setup (void)
   TCCR0B = (1 << CS00); /*No pre-scaling (page 108)*/
 
   /* Sets Timer1 in Fast PWM mode. Clears OC1A/B on Compare Match, set OC1A/B at BOTTOM (non-inverting mode).
-   Then, waveform generation is set to mode 3: Fast PWM with TOP of 0xFF */
-  TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM12) | (1 << WGM10); // page 171 and 172 
-  TCCR1B = (1 << CS10); // No pre-scaling (page 173) 
+   Then, waveform generation is set to mode 3: Fast PWM with TOP of 0xFF. Prescaler of 256 */
+  TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM12) | (1 << WGM10); // page 171 and 172
+  TCCR1B = (1 << CS12);                                                 // sysClk/256 (page 173)
 
   /* Sets Timer2 in CTC mode mode (non-pwm). Generates output compare interrupt
   TOP = OCR2A, update of OCR2 at immediate, prescaler of 256 */
