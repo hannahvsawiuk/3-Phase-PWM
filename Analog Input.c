@@ -1,4 +1,5 @@
-/* analogRead() converts the input voltage (0 to 5 volt range) to a digital value between 0 and 1023
+/* 
+ * analogRead() converts the input voltage (0 to 5 volt range) to a digital value between 0 and 1023
  * Want a frequency variation of 0 to 120 Hz, so 
  */
 int analogIn = 0;
